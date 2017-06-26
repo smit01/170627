@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+    Test: <input type="text" id="txtTest" />
+    <hr>
+    <div id="debug"></div>
+
+    <script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "ChunkedTransfer_Server.ashx", true);
+    xhr.onprogress = function (e) {
+        // document.getElementById("debug").innerHTML += xhr.responseText + "<hr>";
+        var lastEventEndAt = xhr.responseText.lastIndexOf("}");
+        if (lastEventEndAt < 0)
+            return;
+        var data = xhr.responseText.substr(0, lastEventEndAt + 1) + "]";
+        var eventList;
+        try {
+            eventList = JSON.parse(data);
+        }
+        catch (e) {
+            // JSON parse wrong , typeof eventList is "undefined"
+            return;
+        }
+        // document.getElementById("debug").innerHTML = JSON.stringify(eventList);
+        document.getElementById("debug").innerHTML =
+            eventList[eventList.length - 1].data + "%";
+    }
+    xhr.send(null);
+    </script>
+
+
+
+</body>
+</html>

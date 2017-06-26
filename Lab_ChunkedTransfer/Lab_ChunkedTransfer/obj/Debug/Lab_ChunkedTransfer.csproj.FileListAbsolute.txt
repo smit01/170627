@@ -1,0 +1,5 @@
+C:\Lab\Lab_ChunkedTransfer\Lab_ChunkedTransfer\bin\Lab_ChunkedTransfer.dll.config
+C:\Lab\Lab_ChunkedTransfer\Lab_ChunkedTransfer\bin\Lab_ChunkedTransfer.dll
+C:\Lab\Lab_ChunkedTransfer\Lab_ChunkedTransfer\bin\Lab_ChunkedTransfer.pdb
+C:\Lab\Lab_ChunkedTransfer\Lab_ChunkedTransfer\obj\Debug\Lab_ChunkedTransfer.dll
+C:\Lab\Lab_ChunkedTransfer\Lab_ChunkedTransfer\obj\Debug\Lab_ChunkedTransfer.pdb

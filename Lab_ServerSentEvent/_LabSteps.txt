@@ -1,0 +1,91 @@
+﻿Lab: Server-sent Event
+
+
+
+
+1.  新建一個空白的 MVC 專案
+
+    檔案 | 新增 | 專案 | Visual C# | 
+    Web | ASP.NET Web Application
+    名稱: testServerSentEvent
+    選擇: 空白，勾選 MVC
+
+
+
+
+2.  加入控制器，實作 SSE 伺服器:
+
+
+2.1 加入控制器
+    滑鼠右鍵 Controllers 資料夾 | 加入 | 控制器，
+    選擇: MVC5 控制器 - 空白
+    控制器名稱: HomeController
+
+
+2.2 HomeController 的程式碼如下:
+
+    public class HomeController : Controller
+    {
+        // GET: Home
+        public ActionResult Index()
+        {
+            ViewBag.Message = "SSE WITH ASP.NET MVC";
+            return View();
+        }
+
+        public ActionResult Message() {
+            var result = new System.Text.StringBuilder();
+            result.AppendFormat("data: {0:HH:mm:ss}\n\n", DateTime.Now);
+            return Content(result.ToString(), "text/event-stream");
+        }
+    }
+
+
+    // Note: 請留意 MIME type 為 text/event-stream
+
+    // Note: 請留意訊息以 \n\n 連續兩個換行符號結尾
+
+
+2.3 Ctrl + F5 測試程式
+    將網址改成 http://localhost:你的專案埠號/Home/Message
+
+
+
+
+3.  實作 Client 畫面
+
+
+3.1 回到 VS IDE，滑鼠右鍵點按「public ActionResult Index()」
+    加入檢視，各選項全部按預設值。
+
+
+3.2 index.cshtml 內空如下:
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Message</h2>
+
+<div id="result"></div>
+
+<script>
+
+    if (typeof (EventSource) !== "undefined") {
+        var source = new EventSource("/home/message");
+        source.onmessage = function (event) {
+            document.getElementById("result").innerHTML += event.data + "<br>";
+        };
+    }
+    else {
+        document.getElementById("result").innerHTML =
+            "Sorry, your browser does not support server-sent events.";
+    }
+
+</script>
+
+
+3.3 Ctrl + F5 測試程式
+    <Note>預設每三秒更新時間一次。
+

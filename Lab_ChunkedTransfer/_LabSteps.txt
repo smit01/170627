@@ -1,0 +1,100 @@
+Lab: Chunked transfer encoding (分塊傳輸編碼)
+
+
+
+
+1.	File | Open Project/Solution，開啟 ChunkedTransfer.sln 
+
+
+
+
+2.  開啟 ChunkedTransfer_Server.ashx，將下列內容貼入 ProcessRequest 函式:
+
+            context.Response.BufferOutput = false;
+
+            context.Response.Write("[");
+            HttpContext.Current.Response.Flush();
+
+            for (int i = 1; i <= 10; i++) {
+                System.Threading.Thread.Sleep(1000);
+                context.Response.Write(
+                    "{\"event\": \"progress\", \"data\": " + (i * 10).ToString() + "}");
+                if (i <= 10)
+                    context.Response.Write(",");
+                HttpContext.Current.Response.Flush();
+            }
+
+
+
+
+3.  按下組合鍵 Ctrl + F5 以執行程式，然後將網址改成:
+	http://localhost:50069/ChunkedTransfer_Server.ashx
+	觀察進度依次出現的效果。
+	<Note>建議使用 Fiddler 觀察 HTTP 活動，看看其中是否有 Transfer-Encoding: chunked 標題。
+
+
+
+
+4.  開啟 ChunkedTransfer_Client.html，瀏覽網頁內容:
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+    Test: <input type="text" id="txtTest" />
+    <hr>
+    <div id="debug"></div>
+
+    <!--將步驟 5 的程式貼在這裏:-->
+
+
+</body>
+</html>
+
+
+
+
+5.  在 </body>前，置入下列 JavaScript 程式，完成後，按下組合鍵 Ctrl + F5 測試執行看看:
+	<Note>請說明程式的運作方式。
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "ChunkedTransfer_Server.ashx", true);
+        xhr.onprogress = function (e) {
+            document.getElementById("debug").innerHTML += xhr.responseText + "<hr>";
+        }
+        xhr.send(null);
+    </script>
+
+
+
+
+6.  將上述 JavaScript 程式，修改成這樣:
+
+    <script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "ChunkedTransfer_Server.ashx", true);
+    xhr.onprogress = function (e) {
+        // document.getElementById("debug").innerHTML += xhr.responseText + "<hr>";
+        var lastEventEndAt = xhr.responseText.lastIndexOf("}");
+        if (lastEventEndAt < 0)
+            return;
+        var data = xhr.responseText.substr(0, lastEventEndAt + 1) + "]";
+        var eventList;
+        try {
+            eventList = JSON.parse(data);
+        }
+        catch (e) {
+            // JSON parse wrong , typeof eventList is "undefined"
+            return;
+        }
+        // document.getElementById("debug").innerHTML = JSON.stringify(eventList);
+        document.getElementById("debug").innerHTML =
+            eventList[eventList.length - 1].data + "%";
+    }
+    xhr.send(null);
+    </script>
+

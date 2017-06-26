@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Lab</title>
+    <script src="jquery.min.js"></script>
+</head>
+<body>
+
+    <div id="timeSpan">...</div>
+
+    <script>
+        
+        function displayTime(currentTime) {
+            $("#timeSpan").text(currentTime);
+        }
+
+        function getTimeFromServer() {
+            $.get("Time_Server.ashx", displayTime);
+        }
+
+        getTimeFromServer();
+
+        setInterval(getTimeFromServer, 1000);
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+Open Data RESTfull 語法練習
+
+
+1. 以 VS Express 2013 for Web 開啟 Lab_oData 專案。
+
+
+2. 視需要修改 Web.config 有關於 connectionStrings 的連線設定。
+
+
+3. 組合鍵 Ctrl + F5 執行，
+   以下列網址為例練習以 Open Data RESTfull 語法調閱資料:
+
+http://localhost:51936/odata/Products
+http://localhost:51936/odata/Products(1)
+----
+http://localhost:51936/odata/Products?$orderby=UnitPrice%20desc
+http://localhost:51936/odata/Products?$select=ProductID,ProductName,UnitPrice
+http://localhost:51936/odata/Products?$skip=1&$top=3
+http://localhost:51936/odata/Products?$filter=UnitPrice ge 10 and UnitPrice le 20
+----
+http://localhost:51936/odata/Customers('ALFKI')
+http://localhost:51936/odata/Customers('ALFKI')/Orders
+http://localhost:51936/odata/Customers('ALFKI')?$expand=Orders
+
+
